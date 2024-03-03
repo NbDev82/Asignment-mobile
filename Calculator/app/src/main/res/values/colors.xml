@@ -2,7 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red">#FF0000</color>
     <color name="btn_background">#ECECEC</color>
     <color name="btn_result_background">#979797</color>
+    <color name="text">#000000</color>
+    <color name="text_v2">#FF0000</color>
+    <color name="text_hint">#8C8C8C</color>
+    <color name="icon">#000000</color>
 </resources>
