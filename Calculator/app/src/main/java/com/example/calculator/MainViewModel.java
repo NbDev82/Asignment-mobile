@@ -9,6 +9,8 @@ import com.example.calculator.customenum.EOperation;
 import com.udojava.evalex.Expression;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class MainViewModel extends ViewModel {
@@ -312,35 +314,36 @@ public class MainViewModel extends ViewModel {
         if (curExpression == null || curExpression.equals(ENumber.ZERO.getValue())) {
             this.expression.postValue("(");
         } else {
-            int openParenthesesCount = countOccurrences(curExpression, '(');
-            int closeParenthesesCount = countOccurrences(curExpression, ')');
+            int openParenthesesCount = Utils.countOccurrences(curExpression, '(');
+            int closeParenthesesCount = Utils.countOccurrences(curExpression, ')');
             curExpression += openParenthesesCount > closeParenthesesCount ? ")" : "(";
             this.expression.postValue(curExpression);
         }
         updatePreviewResult(curExpression);
     }
 
-    private int countOccurrences(String text, char target) {
-        int count = 0;
-        for (char c : text.toCharArray()) {
-            if (c == target) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public void deleteACharacter() {
+    public void deleteCharacterOrFunction() {
         String curExpression = this.expression.getValue();
-        StringBuilder newExpressionBuilder = new StringBuilder();
 
-        for (int i = 0; i < curExpression.length() - 1; i++) {
-            newExpressionBuilder.append(curExpression.charAt(i));
+        if (curExpression == null
+                || curExpression.equals(ENumber.ZERO.getValue())
+                || curExpression.length() < 2) {
+            return;
         }
 
-        String newExpression = newExpressionBuilder.toString();
-        this.expression.postValue(newExpression);
-        updatePreviewResult(newExpression);
+        if (!Utils.isEndOfFunction(curExpression)) {
+            String newExpression = curExpression.substring(0, curExpression.length() - 1);
+            this.expression.postValue(newExpression);
+            updatePreviewResult(newExpression);
+            return;
+        }
+
+        int startIndex = Utils.getStartIndexOfEndFunction(curExpression);
+        if (startIndex != -1) {
+            String newExpression = curExpression.substring(0, startIndex);
+            this.expression.postValue(newExpression);
+            updatePreviewResult(newExpression);
+        }
     }
 
     public void clearExpression() {
