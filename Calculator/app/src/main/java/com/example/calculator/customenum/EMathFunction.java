@@ -15,6 +15,7 @@ public enum EMathFunction {
     E("e"),
     TAN("tan"),
 
+    FACTORIAL("!"),
     TWOPOWX("2^"),
     XPOW3("^(3)"),
     ARCHYPERSIN("asinh"),
