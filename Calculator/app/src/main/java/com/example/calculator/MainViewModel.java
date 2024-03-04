@@ -17,7 +17,6 @@ public class MainViewModel extends ViewModel {
     private MutableLiveData<String> expression = new MutableLiveData<>("0");
     private MutableLiveData<String> result = new MutableLiveData<>("0");
     private MutableLiveData<String> mode = new MutableLiveData<>();
-    private MutableLiveData<Void> rotate = new MutableLiveData();
 
     public LiveData<String> getExpression() {
         return expression;
@@ -35,9 +34,6 @@ public class MainViewModel extends ViewModel {
         return mode;
     }
 
-    public LiveData<Void> getRotate() {
-        return rotate;
-    }
 
     public MainViewModel() {
         if (expression.getValue() == null) {
@@ -236,9 +232,5 @@ public class MainViewModel extends ViewModel {
 
         String newExpression = currentExpression.substring(0, lastNumberIndex) + lastNumber + ".";
         this.expression.postValue(newExpression);
-    }
-
-    public void rotate() {
-        this.rotate.postValue(null);
     }
 }

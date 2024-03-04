@@ -8,14 +8,17 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.calculator.databinding.ActivityMainBinding;
+import com.google.android.material.button.MaterialButton;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
+    private MaterialButton btnOrientation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +32,12 @@ public class MainActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
 
         setObservers();
+        setListeners();
     }
 
-    private void setObservers()  {
-        viewModel.getToastMessage().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        viewModel.getRotate().observe(this, aVoid -> {
+    private void setListeners() {
+        btnOrientation = findViewById(R.id.btn_orientation);
+        btnOrientation.setOnClickListener(v -> {
             int currentOrientation = getResources().getConfiguration().orientation;
 
             if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -48,5 +46,10 @@ public class MainActivity extends AppCompatActivity {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
         });
+    }
+
+    private void setObservers()  {
+        viewModel.getToastMessage().observe(this, message
+                -> Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show());
     }
 }
