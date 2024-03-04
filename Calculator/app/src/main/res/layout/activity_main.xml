@@ -86,6 +86,7 @@
                 android:textSize="@dimen/_30sdp"
                 app:cornerRadius="@dimen/_36sdp"
                 app:elevation="0dp"
+                android:onClick="@{() -> viewModel.rotate()}"
                 app:icon="@drawable/baseline_rotate_right_24"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
