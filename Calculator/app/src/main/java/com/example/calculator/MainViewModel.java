@@ -10,8 +10,6 @@ import com.example.calculator.customenum.EOperation;
 import com.udojava.evalex.Expression;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class MainViewModel extends ViewModel {
@@ -185,20 +183,28 @@ public class MainViewModel extends ViewModel {
             curExpression = curExpression + numberStr;
         }
 
-        this.expression.postValue(curExpression);
-        updatePreviewResult(curExpression);
+        updateExpressionAndPreviewResult(curExpression);
     }
 
     public void addOperationToExpression(EOperation operation) {
-        String curExpression = expression.getValue();
+        String curExpression = this.expression.getValue();
+        String curChar = operation.getOperationString();
         if (curExpression == null) {
             curExpression = "0";
         }
 
-        curExpression = curExpression + operation.getOperationString();
+        if (Utils.isEndOfOperationCharacter(curExpression)) {
+            StringBuilder stringBuilder = new StringBuilder(curExpression);
+            if (stringBuilder.length() > 0) {
+                stringBuilder.setCharAt(stringBuilder.length() - 1, curChar.charAt(0));
+            }
+            curExpression = stringBuilder.toString();
+            updateExpressionAndPreviewResult(curExpression);
+            return;
+        }
 
-        this.expression.postValue(curExpression);
-        updatePreviewResult(curExpression);
+        curExpression = curExpression + curChar;
+        updateExpressionAndPreviewResult(curExpression);
     }
 
     public void applyResultForExpression() {
@@ -213,12 +219,6 @@ public class MainViewModel extends ViewModel {
         }
     }
 
-    private void updatePreviewResult(String expression) {
-        String result = Utils.getResult(expression);
-        if (!Objects.equals(result, Utils.EXPRESSION_ERROR)) {
-            this.result.postValue(result);
-        }
-    }
 
     public void addParenthesesToExpression() {
         String curExpression = this.expression.getValue();
@@ -236,24 +236,37 @@ public class MainViewModel extends ViewModel {
     public void deleteCharacterOrFunction() {
         String curExpression = this.expression.getValue();
 
-        if (curExpression == null
-                || curExpression.equals(ENumber.ZERO.getValue())
-                || curExpression.length() < 2) {
+        if (curExpression == null || curExpression.equals(ENumber.ZERO.getValue())) {
+            return;
+        }
+
+        if (curExpression.length() == 1 && curExpression.charAt(0) != ENumber.ZERO.getValue().charAt(0)) {
+            updateExpressionAndPreviewResult(ENumber.ZERO.getValue());
             return;
         }
 
         if (!Utils.isEndOfFunction(curExpression)) {
             String newExpression = curExpression.substring(0, curExpression.length() - 1);
-            this.expression.postValue(newExpression);
-            updatePreviewResult(newExpression);
+            updateExpressionAndPreviewResult(newExpression);
             return;
         }
 
         int startIndex = Utils.getStartIndexOfEndFunction(curExpression);
         if (startIndex != -1) {
             String newExpression = curExpression.substring(0, startIndex);
-            this.expression.postValue(newExpression);
-            updatePreviewResult(newExpression);
+            updateExpressionAndPreviewResult(newExpression);
+        }
+    }
+
+    private void updateExpressionAndPreviewResult(String newExpression) {
+        this.expression.postValue(newExpression);
+        updatePreviewResult(newExpression);
+    }
+
+    private void updatePreviewResult(String expression) {
+        String result = Utils.getResult(expression);
+        if (!Objects.equals(result, Utils.EXPRESSION_ERROR)) {
+            this.result.postValue(result);
         }
     }
 

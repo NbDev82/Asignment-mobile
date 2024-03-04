@@ -1,5 +1,6 @@
 package com.example.calculator;
 
+import com.example.calculator.customenum.EOperation;
 import com.example.calculator.customexpression.FactorialFunction;
 import com.udojava.evalex.Expression;
 
@@ -86,5 +87,17 @@ public class Utils {
             }
         }
         return -1;
+    }
+
+    public static boolean isEndOfOperationCharacter(String expression) {
+        char lastChar = expression.charAt(expression.length() - 1);
+        EOperation[] operations = EOperation.values();
+
+        for (EOperation operation : operations) {
+            if (lastChar == operation.getOperationString().charAt(0)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
