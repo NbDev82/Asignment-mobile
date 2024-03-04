@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.calculator.customenum.EConstant;
 import com.example.calculator.customenum.EMathFunction;
 import com.example.calculator.customenum.ENumber;
 import com.example.calculator.customenum.EOperation;
@@ -23,6 +24,7 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     private final MutableLiveData<String> mode = new MutableLiveData<>();
     private final MutableLiveData<Void> rotate = new MutableLiveData();
     private final MutableLiveData<Boolean> isHistoryVisible = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isMenuVisible = new MutableLiveData<>(false);
     private final MutableLiveData<List<History>> historyList = new MutableLiveData<>(new ArrayList<>());
     private final HistoryDao historyDao;
 
@@ -45,6 +47,10 @@ public class MainViewModel extends ViewModel implements HistoryListener {
 
     public LiveData<Boolean> getIsHistoryVisible() {
         return isHistoryVisible;
+    }
+
+    public LiveData<Boolean> getIsMenuVisible() {
+        return isMenuVisible;
     }
 
     public LiveData<List<History>> getHistoryList() {
@@ -71,7 +77,8 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     // Concatenate String
     public String concatenateStrings(String initialString, String stringToAppend) {
         int length = initialString.length();
-        if (length > 0 && Character.isDigit(initialString.charAt(length - 1))) {
+
+        if ((length > 0 && Character.isDigit(initialString.charAt(length - 1))) || initialString.charAt(length - 1) == '!') {
             initialString += "*" + stringToAppend + "(";
         } else {
             initialString += stringToAppend + "(";
@@ -80,12 +87,16 @@ public class MainViewModel extends ViewModel implements HistoryListener {
         return initialString;
     }
 
-    public void changeRadMode() {
-        mode.setValue("Rad");
-    }
+    public String concatenateConstant(String initialString, String stringToAppend) {
+        int length = initialString.length();
 
-    public void changeDegMode() {
-        mode.setValue("Deg");
+        if ((length > 0 && Character.isDigit(initialString.charAt(length - 1))) || initialString.charAt(length - 1) == '!') {
+            initialString += "*" + stringToAppend;
+        } else {
+            initialString += stringToAppend;
+        }
+
+        return initialString;
     }
 
     public void addFunctionToExpression(EMathFunction function) {
@@ -95,6 +106,18 @@ public class MainViewModel extends ViewModel implements HistoryListener {
         }
         String functionStr = function.getValue();
         curExpression = concatenateStrings(curExpression,functionStr);
+
+        this.expression.postValue(curExpression);
+        updatePreviewResult(curExpression);
+    }
+
+    public void addConstantToExpression(EConstant constant) {
+        String curExpression = expression.getValue();
+        if (curExpression == null) {
+            curExpression = "0";
+        }
+        String functionStr = constant.getValue();
+        curExpression = concatenateConstant(curExpression,functionStr);
 
         this.expression.postValue(curExpression);
         updatePreviewResult(curExpression);
@@ -268,13 +291,14 @@ public class MainViewModel extends ViewModel implements HistoryListener {
         this.expression.postValue(newExpression);
     }
 
-    public void rotate() {
-        this.rotate.postValue(null);
-    }
-
     public void toggleHistory() {
         boolean isHistoryVisible = this.isHistoryVisible.getValue();
         this.isHistoryVisible.postValue(!isHistoryVisible);
+    }
+
+    public void toggleMenu() {
+        boolean isMenuVisible = this.isMenuVisible.getValue();
+        this.isMenuVisible.postValue(!isMenuVisible);
     }
 
     public void clearAllHistory() {

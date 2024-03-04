@@ -18,6 +18,7 @@ public class Utils {
         }
 
         expression = replaceFactorial(expression);
+        expression = replacePI(expression);
 
         try {
             Expression exp = new Expression(expression);
@@ -29,6 +30,10 @@ public class Utils {
             e.printStackTrace();
             return EXPRESSION_ERROR;
         }
+    }
+
+    private static String replacePI(String expression) {
+        return expression.replaceAll("π", "pi");
     }
 
     private static String replaceFactorial(String expression) {

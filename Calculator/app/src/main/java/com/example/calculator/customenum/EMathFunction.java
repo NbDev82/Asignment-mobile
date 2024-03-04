@@ -11,10 +11,7 @@ public enum EMathFunction {
     POW2("^(2)"),
     XPOWY("^"),
     ABS("abs"),
-    PI("pi"),
-    E("e"),
     TAN("tan"),
-
     FACTORIAL("!"),
     TWOPOWX("2^"),
     XPOW3("^(3)"),
