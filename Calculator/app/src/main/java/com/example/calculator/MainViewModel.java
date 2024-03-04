@@ -7,16 +7,24 @@ import androidx.lifecycle.ViewModel;
 import com.example.calculator.customenum.EMathFunction;
 import com.example.calculator.customenum.ENumber;
 import com.example.calculator.customenum.EOperation;
-import com.udojava.evalex.Expression;
+import com.example.calculator.history.History;
+import com.example.calculator.history.HistoryDao;
+import com.example.calculator.history.adapter.HistoryListener;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-public class MainViewModel extends ViewModel {
+public class MainViewModel extends ViewModel implements HistoryListener {
     private final MutableLiveData<String> toastMessage = new MutableLiveData<>();
-    private MutableLiveData<String> expression = new MutableLiveData<>("0");
-    private MutableLiveData<String> result = new MutableLiveData<>("0");
-    private MutableLiveData<String> mode = new MutableLiveData<>();
+    private final MutableLiveData<String> expression = new MutableLiveData<>("0");
+    private final MutableLiveData<String> result = new MutableLiveData<>("0");
+    private final MutableLiveData<String> mode = new MutableLiveData<>();
+    private final MutableLiveData<Void> rotate = new MutableLiveData();
+    private final MutableLiveData<Boolean> isHistoryVisible = new MutableLiveData<>(false);
+    private final MutableLiveData<List<History>> historyList = new MutableLiveData<>(new ArrayList<>());
+    private final HistoryDao historyDao;
 
     public LiveData<String> getExpression() {
         return expression;
@@ -35,7 +43,17 @@ public class MainViewModel extends ViewModel {
     }
 
 
-    public MainViewModel() {
+    public LiveData<Boolean> getIsHistoryVisible() {
+        return isHistoryVisible;
+    }
+
+    public LiveData<List<History>> getHistoryList() {
+        return historyList;
+    }
+
+    public MainViewModel(HistoryDao historyDao) {
+        this.historyDao = historyDao;
+
         if (expression.getValue() == null) {
             expression.setValue("");
         }
@@ -43,6 +61,11 @@ public class MainViewModel extends ViewModel {
         if (mode.getValue() == null) {
             mode.setValue("Deg");
         }
+    }
+
+    public void fetchHistoryList() {
+        List<History> historyList = historyDao.getAll();
+        this.historyList.postValue(historyList);
     }
 
     // Concatenate String
@@ -131,13 +154,24 @@ public class MainViewModel extends ViewModel {
         String result = Utils.getResult(expression);
 
         if (Objects.equals(result, Utils.EXPRESSION_ERROR)) {
-            String oldResult = this.result.getValue();
-            this.expression.postValue(oldResult);
-        } else {
-            this.expression.postValue(result);
+            result = this.result.getValue();
         }
+
+        this.expression.postValue(result);
+
+        History history = new History(expression, result, System.currentTimeMillis());
+        historyDao.insert(history);
+        addHistoryItem(history);
     }
 
+    public void addHistoryItem(History newItem) {
+        List<History> currentList = this.historyList.getValue();
+        if (currentList == null) {
+            currentList = new ArrayList<>();
+        }
+        currentList.add(newItem);
+        this.historyList.setValue(currentList);
+    }
 
     public void addParenthesesToExpression() {
         String curExpression = this.expression.getValue();
@@ -232,5 +266,27 @@ public class MainViewModel extends ViewModel {
 
         String newExpression = currentExpression.substring(0, lastNumberIndex) + lastNumber + ".";
         this.expression.postValue(newExpression);
+    }
+
+    public void rotate() {
+        this.rotate.postValue(null);
+    }
+
+    public void toggleHistory() {
+        boolean isHistoryVisible = this.isHistoryVisible.getValue();
+        this.isHistoryVisible.postValue(!isHistoryVisible);
+    }
+
+    public void clearAllHistory() {
+        historyDao.deleteAll();
+        this.historyList.postValue(new ArrayList<>());
+        toastMessage.postValue("Delete all history");
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        History history = this.historyList.getValue().get(position);
+        this.expression.postValue(history.getExpression());
+        this.result.postValue(history.getResult());
     }
 }

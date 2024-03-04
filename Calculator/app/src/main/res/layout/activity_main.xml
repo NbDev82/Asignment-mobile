@@ -7,9 +7,15 @@
         <import type="com.example.calculator.customenum.ENumber"/>
         <import type="com.example.calculator.customenum.EOperation"/>
 
+        <import type="android.view.View"/>
+
         <variable
             name="viewModel"
             type="com.example.calculator.MainViewModel" />
+
+        <variable
+            name="historyAdapter"
+            type="com.example.calculator.history.adapter.HistoryAdapter" />
     </data>
 
     <RelativeLayout
@@ -64,11 +70,12 @@
                 style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
                 android:layout_width="@dimen/_25sdp"
                 android:layout_height="@dimen/_25sdp"
-                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:background="@android:color/transparent"
                 android:textSize="@dimen/_30sdp"
                 app:cornerRadius="@dimen/_36sdp"
                 app:elevation="0dp"
+                android:onClick="@{() -> viewModel.toggleHistory()}"
                 app:icon="@drawable/baseline_access_time_24"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
@@ -148,6 +155,7 @@
                     android:layout_margin="@dimen/_5sdp"
                     android:onClick="@{() -> viewModel.clearExpression()}"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="C"
                     android:textColor="@color/text_v2"
                     android:textSize="@dimen/_30sdp"
@@ -160,6 +168,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="()"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -173,6 +182,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="%"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -207,6 +217,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="7"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -220,6 +231,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="8"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -233,6 +245,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="9"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -267,6 +280,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="4"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -280,6 +294,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="5"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -293,6 +308,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="6"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -328,6 +344,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="1"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -341,6 +358,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="2"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -354,6 +372,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="3"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -388,6 +407,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="±"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -401,6 +421,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="0"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -414,6 +435,7 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
+                    android:visibility="@{viewModel.isHistoryVisible ? View.INVISIBLE : View.VISIBLE}"
                     android:text="."
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
@@ -447,28 +469,33 @@
             android:background="?android:attr/windowBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="@{viewModel.isHistoryVisible ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="@dimen/_205sdp"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
-                android:orientation="vertical"
                 android:padding="@dimen/_7sdp">
 
                 <ScrollView
                     android:id="@+id/sv_history"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_280sdp"
+                    android:layout_above="@id/btn_delete_history"
+                    android:layout_alignParentTop="true"
                     android:layout_margin="@dimen/_10sdp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_history"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:overScrollMode="never"
+                        android:adapter="@{historyAdapter}"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         android:textAlignment="textEnd" />
-
                 </ScrollView>
 
                 <com.google.android.material.button.MaterialButton
@@ -478,10 +505,13 @@
                     android:backgroundTint="@color/btn_background"
                     android:text="@string/btn_delete_history"
                     android:textColor="@color/text"
-                    android:textSize="@dimen/_15sdp" />
+                    android:textSize="@dimen/_15sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:onClick="@{() -> viewModel.clearAllHistory()}" />
 
-
-            </LinearLayout>
+            </RelativeLayout>
 
             <View
                 android:id="@+id/lineView2"
