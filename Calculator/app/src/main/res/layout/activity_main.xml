@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.example.calculator.customenum.ENumber"/>
+        <import type="com.example.calculator.customenum.EOperation"/>
+
         <variable
             name="viewModel"
             type="com.example.calculator.MainViewModel" />
@@ -22,10 +25,11 @@
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_5sdp"
-            android:text="100"
+            android:text="@{viewModel.expression}"
             android:textAlignment="textEnd"
             android:textSize="@dimen/_50sdp"
-            android:textColor="@color/text"/>
+            android:textColor="@color/text"
+            tools:text="100"/>
 
         <TextView
             android:id="@+id/tv_suggest"
@@ -36,10 +40,11 @@
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginBottom="0dp"
-            android:text="0"
+            android:text="@{viewModel.result}"
             android:textAlignment="textEnd"
             android:textColor="@color/text_hint"
-            android:textSize="@dimen/_25sdp" />
+            android:textSize="@dimen/_25sdp"
+            tools:text="0"/>
 
         <LinearLayout
             android:id="@+id/ll_controls"
@@ -94,6 +99,7 @@
                 android:layout_width="@dimen/_25sdp"
                 android:layout_height="@dimen/_25sdp"
                 android:layout_marginLeft="@dimen/_180sdp"
+                android:onClick="@{() -> viewModel.deleteACharacter()}"
                 android:background="@android:color/transparent"
                 android:textSize="@dimen/_30sdp"
                 app:cornerRadius="@dimen/_36sdp"
@@ -140,6 +146,7 @@
                     android:layout_width="@dimen/_60sdp"
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
+                    android:onClick="@{() -> viewModel.clearExpression()}"
                     android:backgroundTint="@color/btn_background"
                     android:text="C"
                     android:textColor="@color/text_v2"
@@ -156,6 +163,7 @@
                     android:text="()"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addParenthesesToExpression()}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -168,6 +176,7 @@
                     android:text="%"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.MODULO)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -180,6 +189,7 @@
                     android:text="÷"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.DIVISION)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
             </LinearLayout>
@@ -200,6 +210,7 @@
                     android:text="7"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.SEVEN)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -212,6 +223,7 @@
                     android:text="8"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.EIGHT)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -224,6 +236,7 @@
                     android:text="9"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.NINE)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -236,6 +249,7 @@
                     android:text="×"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.MULTIPLICATION)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
             </LinearLayout>
@@ -256,6 +270,7 @@
                     android:text="4"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.FOUR)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -268,6 +283,7 @@
                     android:text="5"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.FIVE)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -280,6 +296,7 @@
                     android:text="6"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.SIX)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -293,6 +310,7 @@
                     android:text="－"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.SUBTRACTION)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
             </LinearLayout>
@@ -313,6 +331,7 @@
                     android:text="1"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.ONE)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -325,6 +344,7 @@
                     android:text="2"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.TWO)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -337,6 +357,7 @@
                     android:text="3"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.THREE)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -349,6 +370,7 @@
                     android:text="+"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.ADDITION)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
             </LinearLayout>
@@ -369,6 +391,7 @@
                     android:text="±"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.makeNegativeNumber()}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -381,6 +404,7 @@
                     android:text="0"
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.ZERO)}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -390,9 +414,10 @@
                     android:layout_height="@dimen/_60sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:backgroundTint="@color/btn_background"
-                    android:text=","
+                    android:text="."
                     android:textColor="@color/text"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.addDecimalPointToExpression()}"
                     app:cornerRadius="@dimen/_36sdp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -405,6 +430,7 @@
                     android:text="="
                     android:textColor="@color/btn_background"
                     android:textSize="@dimen/_30sdp"
+                    android:onClick="@{() -> viewModel.applyResultForExpression()}"
                     app:cornerRadius="@dimen/_36sdp" />
 
             </LinearLayout>

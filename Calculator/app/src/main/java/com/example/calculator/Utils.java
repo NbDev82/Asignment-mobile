@@ -3,12 +3,9 @@ package com.example.calculator;
 import com.example.calculator.customexpression.FactorialFunction;
 import com.udojava.evalex.Expression;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-
 public class Utils {
 
+    public static final String EXPRESSION_ERROR = "Error";
     public static final int PRECISION = 10;
 
     public static String getResult(String expression) {
@@ -26,7 +23,7 @@ public class Utils {
             return exp.eval().toPlainString();
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error";
+            return EXPRESSION_ERROR;
         }
     }
 
@@ -36,4 +33,20 @@ public class Utils {
         return expression.replaceAll(factorialRegex, "factorial($1)");
     }
 
+    public static int findLastNumberIndex(String expression) {
+        int lastIndex = -1;
+
+        for (int i = expression.length() - 1; i >= 0; i--) {
+            char ch = expression.charAt(i);
+            if (Character.isDigit(ch) || ch == '.') {
+                lastIndex = i;
+            } else if (ch == '-' && lastIndex == i - 1) {
+                lastIndex = i;
+            } else {
+                break;
+            }
+        }
+
+        return lastIndex;
+    }
 }

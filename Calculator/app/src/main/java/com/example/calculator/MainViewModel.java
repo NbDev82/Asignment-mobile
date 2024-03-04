@@ -1,21 +1,20 @@
 package com.example.calculator;
 
-import android.widget.Toast;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.example.calculator.customenum.ENumber;
+import com.example.calculator.customenum.EOperation;
 import com.udojava.evalex.Expression;
-import com.udojava.evalex.Operator;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class MainViewModel extends ViewModel {
     private final MutableLiveData<String> toastMessage = new MutableLiveData<>();
-    private MutableLiveData<String> expression = new MutableLiveData<>();
-    private MutableLiveData<String> result = new MutableLiveData<>();
+    private MutableLiveData<String> expression = new MutableLiveData<>("0");
+    private MutableLiveData<String> result = new MutableLiveData<>("0");
     private MutableLiveData<String> mode = new MutableLiveData<>();
 
     public LiveData<String> getExpression() {
@@ -258,5 +257,134 @@ public class MainViewModel extends ViewModel {
             this.result.setValue("");
             this.toastMessage.setValue("Không thể hiển thị kết quả không xác định");
         }
+    }
+
+    public void addNumberToExpression(ENumber number) {
+        String curExpression = expression.getValue();
+        if (curExpression == null) {
+            curExpression = "0";
+        }
+
+        String numberStr = number.getValue();
+        if (curExpression.equals(ENumber.ZERO.getValue())) {
+            curExpression = numberStr;
+        } else {
+            curExpression = curExpression + numberStr;
+        }
+
+        this.expression.postValue(curExpression);
+        updatePreviewResult(curExpression);
+    }
+
+    public void addOperationToExpression(EOperation operation) {
+        String curExpression = expression.getValue();
+        if (curExpression == null) {
+            curExpression = "0";
+        }
+
+        curExpression = curExpression + operation.getOperationString();
+
+        this.expression.postValue(curExpression);
+        updatePreviewResult(curExpression);
+    }
+
+    public void applyResultForExpression() {
+        String expression = this.expression.getValue();
+        String result = Utils.getResult(expression);
+
+        if (Objects.equals(result, Utils.EXPRESSION_ERROR)) {
+            String oldResult = this.result.getValue();
+            this.expression.postValue(oldResult);
+        } else {
+            this.expression.postValue(result);
+        }
+    }
+
+    private void updatePreviewResult(String expression) {
+        String result = Utils.getResult(expression);
+        if (!Objects.equals(result, Utils.EXPRESSION_ERROR)) {
+            this.result.postValue(result);
+        }
+    }
+
+    public void addParenthesesToExpression() {
+        String curExpression = this.expression.getValue();
+        if (curExpression == null || curExpression.equals(ENumber.ZERO.getValue())) {
+            this.expression.postValue("(");
+        } else {
+            int openParenthesesCount = countOccurrences(curExpression, '(');
+            int closeParenthesesCount = countOccurrences(curExpression, ')');
+            curExpression += openParenthesesCount > closeParenthesesCount ? ")" : "(";
+            this.expression.postValue(curExpression);
+        }
+        updatePreviewResult(curExpression);
+    }
+
+    private int countOccurrences(String text, char target) {
+        int count = 0;
+        for (char c : text.toCharArray()) {
+            if (c == target) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void deleteACharacter() {
+        String curExpression = this.expression.getValue();
+        StringBuilder newExpressionBuilder = new StringBuilder();
+
+        for (int i = 0; i < curExpression.length() - 1; i++) {
+            newExpressionBuilder.append(curExpression.charAt(i));
+        }
+
+        String newExpression = newExpressionBuilder.toString();
+        this.expression.postValue(newExpression);
+        updatePreviewResult(newExpression);
+    }
+
+    public void clearExpression() {
+        this.expression.postValue("0");
+        this.result.postValue("");
+    }
+
+    public void makeNegativeNumber() {
+        String curExpression = expression.getValue();
+        if (curExpression == null || curExpression.equals(ENumber.ZERO.getValue())) {
+            return;
+        }
+
+        int lastNumberIndex = Utils.findLastNumberIndex(curExpression);
+        String lastNumber = curExpression.substring(lastNumberIndex);
+        String newLastNumber;
+        if (lastNumber.startsWith(EOperation.SUBTRACTION.getOperationString())) {
+            newLastNumber = lastNumber.substring(1);
+        } else {
+            newLastNumber = "(" + EOperation.SUBTRACTION.getOperationString() + lastNumber + ")";
+        }
+
+        String newExpression = curExpression.substring(0, lastNumberIndex) + newLastNumber;
+        this.expression.postValue(newExpression);
+    }
+
+    public void addDecimalPointToExpression() {
+        String currentExpression = this.expression.getValue();
+        if (currentExpression == null || currentExpression.isEmpty()) {
+            this.expression.postValue("0.");
+            return;
+        }
+
+        int lastNumberIndex = Utils.findLastNumberIndex(currentExpression);
+        if (lastNumberIndex == -1) {
+            return;
+        }
+
+        String lastNumber = currentExpression.substring(lastNumberIndex);
+        if (lastNumber.contains(".")) {
+            return;
+        }
+
+        String newExpression = currentExpression.substring(0, lastNumberIndex) + lastNumber + ".";
+        this.expression.postValue(newExpression);
     }
 }
