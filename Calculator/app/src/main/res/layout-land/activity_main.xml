@@ -4,11 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.example.calculator.customenum.ENumber"/>
-        <import type="com.example.calculator.customenum.EOperation"/>
-        <import type="com.example.calculator.customenum.EMathFunction"/>
-        <import type="com.example.calculator.customenum.EConstant"/>
-        <import type="android.view.View"/>
+
+        <import type="com.example.calculator.customenum.ENumber" />
+
+        <import type="com.example.calculator.customenum.EOperation" />
+
+        <import type="com.example.calculator.customenum.EMathFunction" />
+
+        <import type="com.example.calculator.customenum.EConstant" />
+
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -19,19 +24,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_input"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/tv_suggest"
             android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:layout_marginEnd="@dimen/_15sdp"
-            android:layout_marginBottom="8dp"
-            android:text="@{viewModel.expression}"
-            android:textAlignment="textEnd"
-            android:textSize="@dimen/_30sdp"
-            android:textColor="@color/text" />
+            android:layout_marginBottom="@dimen/_8sdp">
+
+            <TextView
+                android:id="@+id/tv_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="8dp"
+                android:text="@{viewModel.expression}"
+                android:textColor="@color/text"
+                android:textSize="@dimen/_25sdp" />
+        </ScrollView>
 
         <TextView
             android:id="@+id/tv_suggest"
@@ -44,7 +55,7 @@
             android:text="@{viewModel.previewResult}"
             android:textAlignment="textEnd"
             android:textColor="@color/text_hint"
-            android:textSize="@dimen/_20sdp" />
+            android:textSize="@dimen/_23sdp" />
 
         <LinearLayout
             android:id="@+id/ll_controls"
@@ -113,6 +124,7 @@
                     android:layout_width="@dimen/_18sdp"
                     android:layout_height="@dimen/_18sdp"
                     android:background="@android:color/transparent"
+                    android:onClick="@{() -> viewModel.deleteCharacterOrFunction()}"
                     android:textSize="@dimen/_18sdp"
                     app:cornerRadius="@dimen/_36sdp"
                     app:elevation="0dp"
@@ -121,7 +133,6 @@
                     app:iconPadding="0dp"
                     app:iconSize="@dimen/_20sdp"
                     app:iconTint="@color/icon"
-                    android:onClick="@{() -> viewModel.deleteCharacterOrFunction()}"
                     app:iconTintMode="src_in" />
             </LinearLayout>
         </LinearLayout>
@@ -148,8 +159,9 @@
                 android:id="@+id/ll_buttons_v1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_weight="4"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -164,14 +176,14 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_menu"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.toggleMenu()}"
                         android:padding="0dp"
                         android:paddingStart="@dimen/_22sdp"
-                        android:onClick="@{() -> viewModel.toggleMenu()}"
 
                         app:cornerRadius="@dimen/_36sdp"
                         app:icon="@drawable/baseline_autorenew_24"
@@ -181,7 +193,7 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_radian"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginRight="@dimen/_12sdp"
@@ -196,7 +208,7 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_degree"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginRight="@dimen/_12sdp"
@@ -212,25 +224,25 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_sprt"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.SQRT)}"
                         android:padding="0dp"
                         android:text="√"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.SQRT)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_sprt3"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
@@ -238,10 +250,10 @@
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
                         android:padding="0dp"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         android:text="∛"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -256,58 +268,58 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_sin"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.SIN)}"
                         android:padding="0dp"
                         android:text="sin"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.SIN)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_cos"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.COS)}"
                         android:padding="0dp"
                         android:text="cos"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.COS)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_tan"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.TAN)}"
                         android:padding="0dp"
                         android:text="tan"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.TAN)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -322,58 +334,58 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_logarithm"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.LN)}"
                         android:padding="0dp"
                         android:text="ln"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.LN)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_log"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.LOG)}"
                         android:padding="0dp"
                         android:text="log"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.LOG)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_inverse"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.PARTX)}"
                         android:padding="0dp"
                         android:text="1/x"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.PARTX)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -389,58 +401,58 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_exponential_euler"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.EPOW)}"
                         android:padding="0dp"
                         android:text="eⁿ"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.EPOW)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_square"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpressionHaveToast(EMathFunction.POW2)}"
                         android:padding="0dp"
                         android:text="n²"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpressionHaveToast(EMathFunction.POW2)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_3"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpressionHaveToast(EMathFunction.XPOWY)}"
                         android:padding="0dp"
                         android:text="mⁿ"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpressionHaveToast(EMathFunction.XPOWY)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -456,58 +468,58 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_absolute"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ABS)}"
                         android:padding="0dp"
                         android:text="|x|"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ABS)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_pi"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addConstantToExpression(EConstant.PI)}"
                         android:padding="0dp"
                         android:text="π"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addConstantToExpression(EConstant.PI)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_euler"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
+                        android:onClick="@{() -> viewModel.addConstantToExpression(EConstant.E)}"
                         android:padding="0dp"
                         android:text="e"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addConstantToExpression(EConstant.E)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.GONE : View.VISIBLE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -522,59 +534,59 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_sin_1"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCSIN)}"
                         android:padding="0dp"
                         android:text="sin⁻¹"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCSIN)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_cos_1"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCCOS)}"
                         android:padding="0dp"
                         android:text="cos⁻¹"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCCOS)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
 
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_tan_1"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCTAN)}"
                         android:padding="0dp"
                         android:text="tan⁻¹"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCTAN)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
 
                         app:cornerRadius="@dimen/_36sdp" />
 
@@ -590,60 +602,60 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_sinh"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.HYPERSIN)}"
                         android:padding="0dp"
                         android:text="sinh"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.HYPERSIN)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
 
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_cosh"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.HYPERCOS)}"
                         android:padding="0dp"
                         android:text="cosh"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.HYPERCOS)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
 
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_tanh"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.HYPERTAN)}"
                         android:padding="0dp"
                         android:text="tanh"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.HYPERTAN)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -658,58 +670,58 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_sinh_1"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCHYPERSIN)}"
                         android:padding="0dp"
                         android:text="sinh⁻¹"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_8sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCHYPERSIN)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_cosh_1"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCHYPERCOS)}"
                         android:padding="0dp"
                         android:text="cosh⁻¹"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_8sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCHYPERCOS)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_tanh_1"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCHYPERTAN)}"
                         android:padding="0dp"
                         android:text="tanh⁻¹"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_8sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ARCHYPERTAN)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -724,58 +736,58 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_exponential_2"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.TWOPOWX)}"
                         android:padding="0dp"
                         android:text="2ⁿ"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.TWOPOWX)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_cube"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.XPOW3)}"
                         android:padding="0dp"
                         android:text="x³"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.XPOW3)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_factorial"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
-                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> viewModel.addFunctionToExpressionHaveToast(EMathFunction.FACTORIAL)}"
                         android:padding="0dp"
                         android:text="n!"
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
-                        android:onClick="@{() -> viewModel.addFunctionToExpressionHaveToast(EMathFunction.FACTORIAL)}"
+                        android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -844,9 +856,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_weight="3"
                 android:orientation="vertical">
 
@@ -859,8 +871,8 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_c"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
-                        android:layout_height="26dp"
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
@@ -877,52 +889,52 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_bracket"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addParenthesesToExpression()}"
                         android:padding="0dp"
                         android:text="()"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addParenthesesToExpression()}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_percent"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.MODULO)}"
                         android:padding="0dp"
                         android:text="%"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.MODULO)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_divide"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.DIVISION)}"
                         android:padding="0dp"
                         android:text="÷"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.DIVISION)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -936,69 +948,69 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_7"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.SEVEN)}"
                         android:padding="0dp"
                         android:text="7"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.SEVEN)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_8"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.EIGHT)}"
                         android:padding="0dp"
                         android:text="8"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.EIGHT)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_9"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.NINE)}"
                         android:padding="0dp"
                         android:text="9"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.NINE)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_multip"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.MULTIPLICATION)}"
                         android:padding="0dp"
                         android:text="×"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.MULTIPLICATION)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -1012,58 +1024,58 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_4"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.FOUR)}"
                         android:padding="0dp"
                         android:text="4"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.FOUR)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_5"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.FIVE)}"
                         android:padding="0dp"
                         android:text="5"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.FIVE)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_6"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.SIX)}"
                         android:padding="0dp"
                         android:text="6"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.SIX)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_minus"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
@@ -1071,11 +1083,11 @@
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
                         android:contentDescription="Divide Button"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.SUBTRACTION)}"
                         android:padding="0dp"
                         android:text="－"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.SUBTRACTION)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -1089,69 +1101,69 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_1"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.ONE)}"
                         android:padding="0dp"
                         android:text="1"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.ONE)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_2"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.TWO)}"
                         android:padding="0dp"
                         android:text="2"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.TWO)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_x_power_y"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.THREE)}"
                         android:padding="0dp"
                         android:text="3"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.THREE)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_add"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.ADDITION)}"
                         android:padding="0dp"
                         android:text="+"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.ADDITION)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -1165,69 +1177,69 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_opposite"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.toggleLastNumberSign()}"
                         android:padding="0dp"
                         android:text="±"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.toggleLastNumberSign()}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_0"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.ZERO)}"
                         android:padding="0dp"
                         android:text="0"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.ZERO)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_point"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.addDecimalPointToExpression()}"
                         android:padding="0dp"
                         android:text="."
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.addDecimalPointToExpression()}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_result"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                        android:layout_width="@dimen/_55sdp"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_25sdp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/text_hint"
+                        android:onClick="@{() -> viewModel.applyResultForExpression()}"
                         android:padding="0dp"
                         android:text="="
                         android:textColor="@color/btn_background"
                         android:textSize="@dimen/_13sdp"
-                        android:onClick="@{() -> viewModel.applyResultForExpression()}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
