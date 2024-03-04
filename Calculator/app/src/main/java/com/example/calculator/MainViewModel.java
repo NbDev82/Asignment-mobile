@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.calculator.customenum.EMathFunction;
 import com.example.calculator.customenum.ENumber;
 import com.example.calculator.customenum.EOperation;
 import com.udojava.evalex.Expression;
@@ -43,108 +44,6 @@ public class MainViewModel extends ViewModel {
         if (mode.getValue() == null) {
             mode.setValue("Deg");
         }
-    }
-
-    public void addSQRTString() {
-        String curExpression = expression.getValue();
-
-        if(!result.equals("")) {
-            expression.setValue(curExpression+"SQRT(");
-        } else {
-            expression.setValue(curExpression+"*SQRT(");
-        }
-    }
-
-    public void addSinString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "sin"));
-        result.setValue("");
-    }
-
-    public void addCosString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "cos"));
-        result.setValue("");
-    }
-
-    public void addTanString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "tan"));
-        result.setValue("");
-    }
-
-    public void addLnString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "ln"));
-        result.setValue("");
-    }
-
-    public void addLogString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "log"));
-        result.setValue("");
-    }
-
-    public void addPartXString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "1/"));
-        result.setValue("");
-    }
-
-    public void addEPowString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "e^"));
-        result.setValue("");
-    }
-
-    public void addPow2String() {
-        String curExpression = expression.getValue();
-
-        if(!result.equals("")) {
-            expression.setValue(curExpression+"^(2)");
-            evaluateExpression();
-        } else {
-            this.toastMessage.setValue("Định dạng đã dùng không hợp lệ");
-        }
-    }
-
-    public void addXPowYString() {
-        String curExpression = expression.getValue();
-
-        if(!result.equals("")) {
-            expression.setValue(curExpression+"^");
-            result.setValue("");
-        } else {
-            this.toastMessage.setValue("Định dạng đã dùng không hợp lệ");
-        }
-    }
-
-    public void addAbsString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "abs"));
-        result.setValue("");
-    }
-
-    public void addPIString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "pi"));
-        result.setValue("");
-    }
-
-    public void addEString() {
-        String curExpression = expression.getValue();
-
-        expression.setValue(concatenateStrings(curExpression, "e"));
-        result.setValue("");
     }
 
     // Extends function
@@ -249,15 +148,27 @@ public class MainViewModel extends ViewModel {
         mode.setValue("Deg");
     }
 
-    public void evaluateExpression() {
-        try{
-            Expression expression = new Expression(this.expression.getValue());
-            BigDecimal result = expression.eval();
+    public void addFunctionToExpression(EMathFunction function) {
+        String curExpression = expression.getValue();
+        if (curExpression == null) {
+            curExpression = "0";
+        }
+        String functionStr = function.getValue();
+        curExpression = concatenateStrings(curExpression,functionStr);
 
-            this.result.setValue(result.toEngineeringString());
-        } catch (ArithmeticException | IllegalArgumentException | Expression.ExpressionException e) {
-            this.result.setValue("");
-            this.toastMessage.setValue("Không thể hiển thị kết quả không xác định");
+        this.expression.postValue(curExpression);
+        updatePreviewResult(curExpression);
+    }
+
+    public void addFunctionToExpressionHaveToast(EMathFunction function) {
+        if(!result.getValue().equals("") && !result.getValue().equals("0")) {
+            String functionStr = function.getValue();
+            String curExpression = expression.getValue();
+            curExpression = curExpression + functionStr;
+            this.expression.postValue(curExpression);
+            updatePreviewResult(curExpression);
+        } else {
+            this.toastMessage.setValue("Định dạng đã dùng không hợp lệ");
         }
     }
 

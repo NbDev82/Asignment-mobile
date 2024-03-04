@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.example.calculator.customenum.ENumber"/>
+        <import type="com.example.calculator.customenum.EOperation"/>
+        <import type="com.example.calculator.customenum.EMathFunction"/>
 
         <variable
             name="viewModel"
@@ -23,7 +26,7 @@
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginBottom="8dp"
-            android:text="100"
+            android:text="@{viewModel.expression}"
             android:textAlignment="textEnd"
             android:textSize="@dimen/_30sdp"
             android:textColor="@color/text" />
@@ -36,7 +39,7 @@
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginBottom="0dp"
-            android:text="0"
+            android:text="@{viewModel.result}"
             android:textAlignment="textEnd"
             android:textColor="@color/text_hint"
             android:textSize="@dimen/_20sdp" />
@@ -116,6 +119,7 @@
                     app:iconPadding="0dp"
                     app:iconSize="@dimen/_20sdp"
                     app:iconTint="@color/icon"
+                    android:onClick="@{() -> viewModel.deleteCharacterOrFunction()}"
                     app:iconTintMode="src_in" />
             </LinearLayout>
         </LinearLayout>
@@ -215,6 +219,7 @@
                         android:text="√"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.SQRT)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -258,6 +263,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.SIN)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -275,6 +281,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.COS)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -292,6 +299,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.TAN)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -318,6 +326,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.LN)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -335,6 +344,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.LOG)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -352,6 +362,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.PARTX)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -378,6 +389,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.EPOW)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -395,6 +407,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpressionHaveToast(EMathFunction.POW2)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -412,6 +425,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpressionHaveToast(EMathFunction.XPOWY)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -438,6 +452,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.ABS)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -455,6 +470,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.PI)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -472,6 +488,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_9sdp"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.E)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -800,16 +817,18 @@
                         android:id="@+id/btn_c"
                         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
                         android:layout_width="@dimen/_55sdp"
-                        android:layout_height="@dimen/_25sdp"
+                        android:layout_height="26dp"
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginRight="@dimen/_12sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
+                        android:onClick="@{() -> viewModel.clearExpression()}"
                         android:padding="0dp"
                         android:text="C"
                         android:textColor="@color/text_v2"
                         android:textSize="@dimen/_13sdp"
+
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -826,6 +845,7 @@
                         android:text="()"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addParenthesesToExpression()}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -842,6 +862,7 @@
                         android:text="%"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.MODULO)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -858,6 +879,7 @@
                         android:text="÷"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.DIVISION)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -882,6 +904,7 @@
                         android:text="7"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.SEVEN)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -898,6 +921,7 @@
                         android:text="8"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.EIGHT)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -914,6 +938,7 @@
                         android:text="9"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.NINE)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -930,6 +955,7 @@
                         android:text="×"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.MULTIPLICATION)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -954,6 +980,7 @@
                         android:text="4"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.FOUR)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -970,6 +997,7 @@
                         android:text="5"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.FIVE)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -986,6 +1014,7 @@
                         android:text="6"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.SIX)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -1003,6 +1032,7 @@
                         android:text="－"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.SUBTRACTION)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -1027,6 +1057,7 @@
                         android:text="1"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.ONE)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -1043,6 +1074,7 @@
                         android:text="2"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.TWO)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -1059,6 +1091,7 @@
                         android:text="3"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.THREE)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -1075,6 +1108,7 @@
                         android:text="+"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addOperationToExpression(EOperation.ADDITION)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
@@ -1099,6 +1133,7 @@
                         android:text="±"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.makeNegativeNumber()}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -1115,6 +1150,7 @@
                         android:text="0"
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addNumberToExpression(ENumber.ZERO)}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -1128,9 +1164,10 @@
                         android:layout_marginBottom="@dimen/_4sdp"
                         android:backgroundTint="@color/btn_background"
                         android:padding="0dp"
-                        android:text=","
+                        android:text="."
                         android:textColor="@color/text"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.addDecimalPointToExpression()}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -1147,6 +1184,7 @@
                         android:text="="
                         android:textColor="@color/btn_background"
                         android:textSize="@dimen/_13sdp"
+                        android:onClick="@{() -> viewModel.applyResultForExpression()}"
                         app:cornerRadius="@dimen/_36sdp" />
 
                 </LinearLayout>
