@@ -21,7 +21,6 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     private final MutableLiveData<String> expression = new MutableLiveData<>("0");
     private final MutableLiveData<String> previewResult = new MutableLiveData<>("0");
     private final MutableLiveData<String> mode = new MutableLiveData<>();
-    private final MutableLiveData<Void> rotate = new MutableLiveData();
     private final MutableLiveData<Boolean> isHistoryVisible = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> isMenuVisible = new MutableLiveData<>(false);
     private final MutableLiveData<List<History>> historyList = new MutableLiveData<>(new ArrayList<>());
@@ -136,39 +135,14 @@ public class MainViewModel extends ViewModel implements HistoryListener {
 
     public void addNumberToExpression(ENumber number) {
         String curExpression = expression.getValue();
-        if (curExpression == null) {
-            curExpression = "0";
-        }
-
-        String numberStr = number.getValue();
-        if (curExpression.equals(ENumber.ZERO.getValue())) {
-            curExpression = numberStr;
-        } else {
-            curExpression = curExpression + numberStr;
-        }
-
-        updateExpressionAndPreviewResult(curExpression);
+        String newExpression = Utils.addNumberToExpression(curExpression, number);
+        updateExpressionAndPreviewResult(newExpression);
     }
 
     public void addOperationToExpression(EOperation operation) {
-        String curExpression = this.expression.getValue();
-        String curChar = operation.getOperationString();
-        if (curExpression == null) {
-            curExpression = "0";
-        }
-
-        if (Utils.isEndOfOperationCharacter(curExpression)) {
-            StringBuilder stringBuilder = new StringBuilder(curExpression);
-            if (stringBuilder.length() > 0) {
-                stringBuilder.setCharAt(stringBuilder.length() - 1, curChar.charAt(0));
-            }
-            curExpression = stringBuilder.toString();
-            updateExpressionAndPreviewResult(curExpression);
-            return;
-        }
-
-        curExpression = curExpression + curChar;
-        updateExpressionAndPreviewResult(curExpression);
+        String curExpression = expression.getValue();
+        String newExpression = Utils.addOperationToExpression(curExpression, operation);
+        updateExpressionAndPreviewResult(newExpression);
     }
 
     public void applyResultForExpression() {
@@ -198,41 +172,15 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     }
 
     public void addParenthesesToExpression() {
-        String curExpression = this.expression.getValue();
-        if (curExpression == null || curExpression.equals(ENumber.ZERO.getValue())) {
-            this.expression.postValue("(");
-        } else {
-            int openParenthesesCount = Utils.countOccurrences(curExpression, '(');
-            int closeParenthesesCount = Utils.countOccurrences(curExpression, ')');
-            curExpression += openParenthesesCount > closeParenthesesCount ? ")" : "(";
-            this.expression.postValue(curExpression);
-        }
-        updatePreviewResult(curExpression);
+        String curExpression = expression.getValue();
+        String newExpression = Utils.addParenthesesToExpression(curExpression);
+        updateExpressionAndPreviewResult(newExpression);
     }
 
     public void deleteCharacterOrFunction() {
-        String curExpression = this.expression.getValue();
-
-        if (curExpression == null || curExpression.equals(ENumber.ZERO.getValue())) {
-            return;
-        }
-
-        if (curExpression.length() == 1 && curExpression.charAt(0) != ENumber.ZERO.getValue().charAt(0)) {
-            updateExpressionAndPreviewResult(ENumber.ZERO.getValue());
-            return;
-        }
-
-        if (!Utils.isEndOfFunction(curExpression)) {
-            String newExpression = curExpression.substring(0, curExpression.length() - 1);
-            updateExpressionAndPreviewResult(newExpression);
-            return;
-        }
-
-        int startIndex = Utils.getStartIndexOfEndFunction(curExpression);
-        if (startIndex != -1) {
-            String newExpression = curExpression.substring(0, startIndex);
-            updateExpressionAndPreviewResult(newExpression);
-        }
+        String curExpression = expression.getValue();
+        String newExpression = Utils.deleteCharacterOrFunction(curExpression);
+        updateExpressionAndPreviewResult(newExpression);
     }
 
     private void updateExpressionAndPreviewResult(String newExpression) {
@@ -252,44 +200,16 @@ public class MainViewModel extends ViewModel implements HistoryListener {
         this.previewResult.postValue("");
     }
 
-    public void makeNegativeNumber() {
+    public void toggleLastNumberSign() {
         String curExpression = expression.getValue();
-        if (curExpression == null || curExpression.equals(ENumber.ZERO.getValue())) {
-            return;
-        }
-
-        int lastNumberIndex = Utils.findLastNumberIndex(curExpression);
-        String lastNumber = curExpression.substring(lastNumberIndex);
-        String newLastNumber;
-        if (lastNumber.startsWith(EOperation.SUBTRACTION.getOperationString())) {
-            newLastNumber = lastNumber.substring(1);
-        } else {
-            newLastNumber = "(" + EOperation.SUBTRACTION.getOperationString() + lastNumber + ")";
-        }
-
-        String newExpression = curExpression.substring(0, lastNumberIndex) + newLastNumber;
-        this.expression.postValue(newExpression);
+        String newExpression = Utils.toggleLastNumberSign(curExpression);
+        updateExpressionAndPreviewResult(newExpression);
     }
 
     public void addDecimalPointToExpression() {
-        String currentExpression = this.expression.getValue();
-        if (currentExpression == null || currentExpression.isEmpty()) {
-            this.expression.postValue("0.");
-            return;
-        }
-
-        int lastNumberIndex = Utils.findLastNumberIndex(currentExpression);
-        if (lastNumberIndex == -1) {
-            return;
-        }
-
-        String lastNumber = currentExpression.substring(lastNumberIndex);
-        if (lastNumber.contains(".")) {
-            return;
-        }
-
-        String newExpression = currentExpression.substring(0, lastNumberIndex) + lastNumber + ".";
-        this.expression.postValue(newExpression);
+        String curExpression = expression.getValue();
+        String newExpression = Utils.addDecimalPointToExpression(curExpression);
+        updateExpressionAndPreviewResult(newExpression);
     }
 
     public void toggleHistory() {

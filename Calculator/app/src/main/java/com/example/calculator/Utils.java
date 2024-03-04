@@ -1,12 +1,12 @@
 package com.example.calculator;
 
 import com.example.calculator.customenum.EMathFunction;
+import com.example.calculator.customenum.ENumber;
 import com.example.calculator.customenum.EOperation;
 import com.example.calculator.customexpression.FactorialFunction;
 import com.udojava.evalex.Expression;
 
-import java.util.Arrays;
-import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 public class Utils {
 
@@ -70,6 +70,79 @@ public class Utils {
         return count;
     }
 
+    public static boolean isEndOfOperationCharacter(String expression) {
+        char lastChar = expression.charAt(expression.length() - 1);
+        EOperation[] operations = EOperation.values();
+
+        for (EOperation operation : operations) {
+            if (lastChar == operation.getOperationString().charAt(0)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String addNumberToExpression(@Nullable String expression, ENumber number) {
+        if (expression == null) {
+            expression = "0";
+        }
+
+        String numberStr = number.getValue();
+        if (expression.equals(ENumber.ZERO.getValue())) {
+            expression = numberStr;
+        } else {
+            expression = expression + numberStr;
+        }
+        return expression;
+    }
+
+    public static String addOperationToExpression(@Nullable String expression, EOperation operation) {
+        if (expression == null) {
+            expression = "0";
+        }
+
+        String operationStr = operation.getOperationString();
+        if (Utils.isEndOfOperationCharacter(expression)) {
+            StringBuilder stringBuilder = new StringBuilder(expression);
+            if (stringBuilder.length() > 0) {
+                stringBuilder.setCharAt(stringBuilder.length() - 1, operationStr.charAt(0));
+            }
+            expression = stringBuilder.toString();
+            return expression;
+        }
+
+        return expression + operationStr;
+    }
+
+    public static String addParenthesesToExpression(@Nullable String expression) {
+        if (expression == null || expression.equals(ENumber.ZERO.getValue())) {
+            return "(";
+        }
+
+        int openParenthesesCount = Utils.countOccurrences(expression, '(');
+        int closeParenthesesCount = Utils.countOccurrences(expression, ')');
+        expression += openParenthesesCount > closeParenthesesCount ? ")" : "(";
+        return expression;
+    }
+
+    public static String deleteCharacterOrFunction(@Nullable String expression) {
+        if (expression == null || expression.equals(ENumber.ZERO.getValue())) {
+            return expression;
+        }
+
+        if (expression.length() == 1 && expression.charAt(0) != ENumber.ZERO.getValue().charAt(0)) {
+            return ENumber.ZERO.getValue();
+        }
+
+        if (!isEndOfFunction(expression)) {
+            return expression.substring(0, expression.length() - 1);
+        }
+
+        int startIndex = getStartIndexOfEndFunction(expression);
+        return expression.substring(0, startIndex);
+    }
+
+
     public static boolean isEndOfFunction(String expression) {
         EMathFunction[] functions = EMathFunction.values();
 
@@ -98,15 +171,42 @@ public class Utils {
         return -1;
     }
 
-    public static boolean isEndOfOperationCharacter(String expression) {
-        char lastChar = expression.charAt(expression.length() - 1);
-        EOperation[] operations = EOperation.values();
-
-        for (EOperation operation : operations) {
-            if (lastChar == operation.getOperationString().charAt(0)) {
-                return true;
-            }
+    public static String toggleLastNumberSign(@Nullable String expression) {
+        if (expression == null || expression.equals(ENumber.ZERO.getValue())) {
+            return expression;
         }
-        return false;
+
+        int lastNumberIndex = findLastNumberIndex(expression);
+        if (lastNumberIndex == -1) {
+            return expression;
+        }
+
+        String lastNumber = expression.substring(lastNumberIndex);
+        String newLastNumber;
+        if (lastNumber.startsWith(EOperation.SUBTRACTION.getOperationString())) {
+            newLastNumber = lastNumber.substring(1);
+        } else {
+            newLastNumber = "(" + EOperation.SUBTRACTION.getOperationString() + lastNumber + ")";
+        }
+
+        return expression.substring(0, lastNumberIndex) + newLastNumber;
+    }
+
+    public static String addDecimalPointToExpression(@Nullable String expression) {
+        if (expression == null || expression.isEmpty()) {
+            return "0.";
+        }
+
+        int lastNumberIndex = findLastNumberIndex(expression);
+        if (lastNumberIndex == -1) {
+            return expression;
+        }
+
+        String lastNumber = expression.substring(lastNumberIndex);
+        if (lastNumber.contains(".")) {
+            return expression;
+        }
+
+        return expression.substring(0, lastNumberIndex) + lastNumber + ".";
     }
 }
