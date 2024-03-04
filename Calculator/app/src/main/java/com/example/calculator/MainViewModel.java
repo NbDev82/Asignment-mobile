@@ -1,5 +1,7 @@
 package com.example.calculator;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,6 +19,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainViewModel extends ViewModel implements HistoryListener {
+
+    private static final String TAG = MainViewModel.class.getSimpleName();
+
     private final MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private final MutableLiveData<String> expression = new MutableLiveData<>("0");
     private final MutableLiveData<String> previewResult = new MutableLiveData<>("0");
@@ -134,32 +139,44 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     }
 
     public void addNumberToExpression(ENumber number) {
-        String curExpression = expression.getValue();
-        String newExpression = Utils.addNumberToExpression(curExpression, number);
-        updateExpressionAndPreviewResult(newExpression);
+        try {
+            String curExpression = expression.getValue();
+            String newExpression = Utils.addNumberToExpression(curExpression, number);
+            updateExpressionAndPreviewResult(newExpression);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     public void addOperationToExpression(EOperation operation) {
-        String curExpression = expression.getValue();
-        String newExpression = Utils.addOperationToExpression(curExpression, operation);
-        updateExpressionAndPreviewResult(newExpression);
+        try {
+            String curExpression = expression.getValue();
+            String newExpression = Utils.addOperationToExpression(curExpression, operation);
+            updateExpressionAndPreviewResult(newExpression);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     public void applyResultForExpression() {
-        String expression = this.expression.getValue();
-        String result = Utils.getResult(expression);
+        try {
+            String expression = this.expression.getValue();
+            String result = Utils.getResult(expression);
 
-        if (Objects.equals(result, Utils.EXPRESSION_ERROR) || Objects.equals(expression, result)) {
-            this.previewResult.postValue(result);
-            return;
+            if (Objects.equals(result, Utils.EXPRESSION_ERROR) || Objects.equals(expression, result)) {
+                this.previewResult.postValue(result);
+                return;
+            }
+
+            this.expression.postValue(result);
+            this.previewResult.postValue("");
+
+            History history = new History(expression, result, System.currentTimeMillis());
+            historyDao.insert(history);
+            addHistoryItem(history);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
         }
-
-        this.expression.postValue(result);
-        this.previewResult.postValue("");
-
-        History history = new History(expression, result, System.currentTimeMillis());
-        historyDao.insert(history);
-        addHistoryItem(history);
     }
 
     public void addHistoryItem(History newItem) {
@@ -172,15 +189,23 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     }
 
     public void addParenthesesToExpression() {
-        String curExpression = expression.getValue();
-        String newExpression = Utils.addParenthesesToExpression(curExpression);
-        updateExpressionAndPreviewResult(newExpression);
+        try {
+            String curExpression = expression.getValue();
+            String newExpression = Utils.addParenthesesToExpression(curExpression);
+            updateExpressionAndPreviewResult(newExpression);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     public void deleteCharacterOrFunction() {
-        String curExpression = expression.getValue();
-        String newExpression = Utils.deleteCharacterOrFunction(curExpression);
-        updateExpressionAndPreviewResult(newExpression);
+        try {
+            String curExpression = expression.getValue();
+            String newExpression = Utils.deleteCharacterOrFunction(curExpression);
+            updateExpressionAndPreviewResult(newExpression);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     private void updateExpressionAndPreviewResult(String newExpression) {
@@ -201,15 +226,23 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     }
 
     public void toggleLastNumberSign() {
-        String curExpression = expression.getValue();
-        String newExpression = Utils.toggleLastNumberSign(curExpression);
-        updateExpressionAndPreviewResult(newExpression);
+        try {
+            String curExpression = expression.getValue();
+            String newExpression = Utils.toggleLastNumberSign(curExpression);
+            updateExpressionAndPreviewResult(newExpression);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     public void addDecimalPointToExpression() {
-        String curExpression = expression.getValue();
-        String newExpression = Utils.addDecimalPointToExpression(curExpression);
-        updateExpressionAndPreviewResult(newExpression);
+        try {
+            String curExpression = expression.getValue();
+            String newExpression = Utils.addDecimalPointToExpression(curExpression);
+            updateExpressionAndPreviewResult(newExpression);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     public void toggleHistory() {
@@ -231,7 +264,9 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     @Override
     public void onItemClick(int position) {
         History history = this.historyList.getValue().get(position);
-        this.expression.postValue(history.getExpression());
-        this.previewResult.postValue(history.getResult());
+        if (history != null) {
+            this.expression.postValue(history.getExpression());
+            this.previewResult.postValue(history.getResult());
+        }
     }
 }
