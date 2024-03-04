@@ -13,14 +13,13 @@ import com.example.calculator.history.HistoryDao;
 import com.example.calculator.history.adapter.HistoryListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class MainViewModel extends ViewModel implements HistoryListener {
     private final MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private final MutableLiveData<String> expression = new MutableLiveData<>("0");
-    private final MutableLiveData<String> result = new MutableLiveData<>("0");
+    private final MutableLiveData<String> previewResult = new MutableLiveData<>("0");
     private final MutableLiveData<String> mode = new MutableLiveData<>();
     private final MutableLiveData<Void> rotate = new MutableLiveData();
     private final MutableLiveData<Boolean> isHistoryVisible = new MutableLiveData<>(false);
@@ -32,8 +31,8 @@ public class MainViewModel extends ViewModel implements HistoryListener {
         return expression;
     }
 
-    public LiveData<String> getResult() {
-        return result;
+    public LiveData<String> getPreviewResult() {
+        return previewResult;
     }
 
     public LiveData<String> getToastMessage() {
@@ -124,7 +123,7 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     }
 
     public void addFunctionToExpressionHaveToast(EMathFunction function) {
-        if(!result.getValue().equals("") && !result.getValue().equals("0")) {
+        if(!previewResult.getValue().equals("") && !previewResult.getValue().equals("0")) {
             String functionStr = function.getValue();
             String curExpression = expression.getValue();
             curExpression = curExpression + functionStr;
@@ -176,11 +175,13 @@ public class MainViewModel extends ViewModel implements HistoryListener {
         String expression = this.expression.getValue();
         String result = Utils.getResult(expression);
 
-        if (Objects.equals(result, Utils.EXPRESSION_ERROR)) {
-            result = this.result.getValue();
+        if (Objects.equals(result, Utils.EXPRESSION_ERROR) || Objects.equals(expression, result)) {
+            this.previewResult.postValue(result);
+            return;
         }
 
         this.expression.postValue(result);
+        this.previewResult.postValue("");
 
         History history = new History(expression, result, System.currentTimeMillis());
         historyDao.insert(history);
@@ -192,7 +193,7 @@ public class MainViewModel extends ViewModel implements HistoryListener {
         if (currentList == null) {
             currentList = new ArrayList<>();
         }
-        currentList.add(newItem);
+        currentList.add(0, newItem);
         this.historyList.setValue(currentList);
     }
 
@@ -242,13 +243,13 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     private void updatePreviewResult(String expression) {
         String result = Utils.getResult(expression);
         if (!Objects.equals(result, Utils.EXPRESSION_ERROR)) {
-            this.result.postValue(result);
+            this.previewResult.postValue(result);
         }
     }
 
     public void clearExpression() {
         this.expression.postValue("0");
-        this.result.postValue("");
+        this.previewResult.postValue("");
     }
 
     public void makeNegativeNumber() {
@@ -311,6 +312,6 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     public void onItemClick(int position) {
         History history = this.historyList.getValue().get(position);
         this.expression.postValue(history.getExpression());
-        this.result.postValue(history.getResult());
+        this.previewResult.postValue(history.getResult());
     }
 }

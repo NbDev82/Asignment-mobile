@@ -1,5 +1,6 @@
 package com.example.calculator;
 
+import com.example.calculator.customenum.EMathFunction;
 import com.example.calculator.customenum.EOperation;
 import com.example.calculator.customexpression.FactorialFunction;
 import com.udojava.evalex.Expression;
@@ -70,22 +71,25 @@ public class Utils {
     }
 
     public static boolean isEndOfFunction(String expression) {
-        List<String> functionPrefixes = Arrays.asList("log(", "ln(", "sin(", "cos(", "tan(", "sqrt(");
+        EMathFunction[] functions = EMathFunction.values();
 
-        for (String prefix : functionPrefixes) {
-            if (expression.endsWith(prefix)) {
+        for (EMathFunction function : functions) {
+            if (expression.endsWith(function.getValue() + "(")) {
                 return true;
             }
         }
+
         return false;
     }
 
     public static int getStartIndexOfEndFunction(String expression) {
+        EMathFunction[] functions = EMathFunction.values();
+
         for (int i = expression.length() - 1; i >= 0; i--) {
             char currentChar = expression.charAt(i);
             if (Character.isLetter(currentChar)) {
-                for (String prefix : Arrays.asList("log", "ln", "sin", "cos", "tan", "sqrt")) {
-                    if (expression.startsWith(prefix, i)) {
+                for (EMathFunction function : functions) {
+                    if (expression.startsWith(function.getValue() + "(", i)) {
                         return i;
                     }
                 }
