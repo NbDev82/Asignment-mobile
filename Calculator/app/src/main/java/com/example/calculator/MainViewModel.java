@@ -77,62 +77,33 @@ public class MainViewModel extends ViewModel implements HistoryListener {
         this.historyList.postValue(historyList);
     }
 
-    // Concatenate String
-    public String concatenateStrings(String initialString, String stringToAppend) {
-        int length = initialString.length();
-
-        if ((length > 0 && Character.isDigit(initialString.charAt(length - 1))) || initialString.charAt(length - 1) == '!') {
-            initialString += "*" + stringToAppend + "(";
-        } else {
-            initialString += stringToAppend + "(";
-        }
-
-        return initialString;
-    }
-
-    public String concatenateConstant(String initialString, String stringToAppend) {
-        int length = initialString.length();
-
-        if ((length > 0 && Character.isDigit(initialString.charAt(length - 1))) || initialString.charAt(length - 1) == '!') {
-            initialString += "*" + stringToAppend;
-        } else {
-            initialString += stringToAppend;
-        }
-
-        return initialString;
-    }
-
     public void addFunctionToExpression(EMathFunction function) {
         String curExpression = expression.getValue();
-        if (curExpression == null) {
-            curExpression = "0";
+        if (curExpression == null || curExpression.equals("0")) {
+            curExpression = "";
         }
-        String functionStr = function.getValue();
-        curExpression = concatenateStrings(curExpression,functionStr);
+        String newExpression = Utils.addFunctionToExpression(curExpression, function);
 
-        this.expression.postValue(curExpression);
-        updatePreviewResult(curExpression);
+        updateExpressionAndPreviewResult(newExpression);
     }
 
     public void addConstantToExpression(EConstant constant) {
         String curExpression = expression.getValue();
-        if (curExpression == null) {
-            curExpression = "0";
+        String result = previewResult.getValue();
+        if (curExpression == null || curExpression.equals("0")) {
+            curExpression = "";
         }
-        String functionStr = constant.getValue();
-        curExpression = concatenateConstant(curExpression,functionStr);
-
-        this.expression.postValue(curExpression);
-        updatePreviewResult(curExpression);
+        String newExpression = Utils.addConstantToExpression(curExpression,constant, result);
+        updateExpressionAndPreviewResult(newExpression);
     }
 
     public void addFunctionToExpressionHaveToast(EMathFunction function) {
-        if(!previewResult.getValue().equals("") && !previewResult.getValue().equals("0")) {
-            String functionStr = function.getValue();
+        Boolean isValidPreviewResult = Utils.isValidPreviewResult(previewResult.getValue());
+        if(isValidPreviewResult) {
             String curExpression = expression.getValue();
-            curExpression = curExpression + functionStr;
-            this.expression.postValue(curExpression);
-            updatePreviewResult(curExpression);
+
+            String newExpression = Utils.addFunctionToExpressionHaveToast(curExpression, function);
+            updateExpressionAndPreviewResult(newExpression);
         } else {
             this.toastMessage.setValue("Định dạng đã dùng không hợp lệ");
         }

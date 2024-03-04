@@ -1,5 +1,6 @@
 package com.example.calculator;
 
+import com.example.calculator.customenum.EConstant;
 import com.example.calculator.customenum.EMathFunction;
 import com.example.calculator.customenum.ENumber;
 import com.example.calculator.customenum.EOperation;
@@ -20,6 +21,7 @@ public class Utils {
 
         expression = replaceFactorial(expression);
         expression = replacePI(expression);
+        expression = replaceLnE(expression);
 
         try {
             Expression exp = new Expression(expression);
@@ -35,6 +37,10 @@ public class Utils {
 
     private static String replacePI(String expression) {
         return expression.replaceAll("π", "pi");
+    }
+
+    private static String replaceLnE(String expression) {
+        return expression.replaceAll("ln", "log");
     }
 
     private static String replaceFactorial(String expression) {
@@ -208,5 +214,76 @@ public class Utils {
         }
 
         return expression.substring(0, lastNumberIndex) + lastNumber + ".";
+    }
+
+    public static String addFunctionToExpression(String curExpression, EMathFunction Efunction) {
+        int length = curExpression.length();
+        String function = Efunction.getValue();
+        String newExpression = curExpression;
+
+        if(length == 0)
+            return newExpression + function + "(";
+
+        char lastChar = newExpression.charAt(length - 1);
+        Boolean lastCharIsOperator = isOperator(lastChar);
+
+        if (!lastCharIsOperator &&
+                (Character.isDigit(lastChar) || lastChar == '!' || lastChar == ')')) {
+            newExpression += "*" + function + "(";
+        } else {
+            newExpression += function + "(";
+        }
+
+        return newExpression;
+    }
+
+    public static String addFunctionToExpressionHaveToast(String curExpression, EMathFunction function) {
+        return curExpression + function.getValue();
+    }
+
+    public static String addConstantToExpression(String curExpression, EConstant Econstant, String result) {
+        int length = curExpression.length();
+        String constant = Econstant.getValue();
+        String newExpression = curExpression;
+        Boolean isDigitResult = isDigit(result);
+        Boolean isZeroResult = result.equals("0");
+
+        if(length == 0)
+            return newExpression + constant;
+
+        char lastChar = newExpression.charAt(length - 1);
+        Boolean lastCharIsOperator = isOperator(lastChar);
+
+        if (!lastCharIsOperator && (!isZeroResult && isDigitResult) ||
+                (Character.isDigit(lastChar) || lastChar == '!')
+        ) {
+            newExpression += "*" + constant;
+        } else {
+            newExpression += constant;
+        }
+
+        return newExpression;
+    }
+
+    private static Boolean isOperator(char c) {
+        return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '(';
+    }
+
+    private static Boolean isDigit(String result) {
+        try {
+            if (Float.isNaN(Float.parseFloat(result))) {
+                return false;
+            }
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static Boolean isValidPreviewResult(String previewResult) {
+        return !previewResult.equals("") &&
+                !previewResult.equals("0") &&
+                !previewResult.equals("NaN") &&
+                !previewResult.equals("Error");
     }
 }
