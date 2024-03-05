@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="btn_circle_size">@dimen/_60sdp</dimen>
+    <dimen name="btn_circle_radius">@dimen/_30sdp</dimen>
+</resources>
