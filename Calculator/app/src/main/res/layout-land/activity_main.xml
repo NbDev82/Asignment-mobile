@@ -26,10 +26,10 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:layout_above="@id/tv_suggest"
             android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_2sdp"
             android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_8sdp">
 
@@ -41,7 +41,7 @@
                 android:padding="8dp"
                 android:text="@{viewModel.expression}"
                 android:textColor="@color/text"
-                android:textSize="@dimen/_25sdp" />
+                android:textSize="@dimen/_28sdp" />
         </ScrollView>
 
         <TextView
@@ -55,7 +55,7 @@
             android:text="@{viewModel.previewResult}"
             android:textAlignment="textEnd"
             android:textColor="@color/text_hint"
-            android:textSize="@dimen/_23sdp" />
+            android:textSize="@dimen/_20sdp" />
 
         <LinearLayout
             android:id="@+id/ll_controls"
