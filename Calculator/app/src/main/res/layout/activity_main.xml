@@ -39,9 +39,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="right"
-
                 android:text="@{viewModel.expression}"
-                android:textSize="@dimen/_40sdp" />
+                android:textColor="@color/text"
+                android:textSize="@dimen/_40ssp"
+                android:background="@android:color/transparent"/>
         </ScrollView>
 
         <TextView
@@ -56,7 +57,7 @@
             android:text="@{viewModel.previewResult}"
             android:textAlignment="textEnd"
             android:textColor="@color/text_hint"
-            android:textSize="@dimen/_25sdp"
+            android:textSize="@dimen/_25ssp"
             tools:text="0" />
 
         <LinearLayout
@@ -89,7 +90,6 @@
                     app:elevation="0dp"
                     app:icon="@drawable/baseline_access_time_24"
                     app:iconGravity="textStart"
-                    app:iconPadding="0dp"
                     app:iconSize="@dimen/_20sdp"
                     app:iconTint="@color/icon"
                     app:iconTintMode="src_in" />
@@ -454,7 +454,8 @@
                         android:orientation="vertical"
                         android:overScrollMode="never"
                         android:textAlignment="textEnd"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
                 </ScrollView>
 
                 <com.google.android.material.button.MaterialButton

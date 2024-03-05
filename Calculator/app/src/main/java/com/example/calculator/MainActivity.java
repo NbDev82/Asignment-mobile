@@ -3,10 +3,18 @@ package com.example.calculator;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.calculator.databinding.ActivityMainBinding;
@@ -22,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel viewModel;
     private MaterialButton btnOrientation;
     private HistoryAdapter historyAdapter;
+    private Animation fade;
+    private Animation fadeOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
         binding.setViewModel(viewModel);
         binding.setHistoryAdapter(historyAdapter);
         binding.setLifecycleOwner(this);
+
+        fade = AnimationUtils.loadAnimation(this, R.anim.fade);
+        fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
 
         setObservers();
         setListeners();
@@ -66,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
     private void setObservers()  {
         viewModel.getToastMessage().observe(this, message
                 -> Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show());
+
+        viewModel.getIsHistoryVisible().observe(this, isHistoryVisible -> {
+            if(isHistoryVisible == true){
+                ScrollView svHistory = findViewById(R.id.sv_history);
+                svHistory.startAnimation(fade);
+            }
+        });
     }
 
     @Override

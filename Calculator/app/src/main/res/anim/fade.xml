@@ -4,5 +4,5 @@
     tools:ignore="MissingDefaultResource">
     <translate android:duration="300"
         android:fromYDelta="10%p"
-        android:fromXDelta="0%p"/>
+        android:fromXDelta="0%p" />
 </set>
