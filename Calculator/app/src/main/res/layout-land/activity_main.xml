@@ -513,7 +513,7 @@
                             style="@style/ButtonPrimaryLandscape"
                             android:layout_width="@dimen/_60sdp"
                             android:layout_height="@dimen/_33sdp"
-                            android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.XPOW3)}"
+                            android:onClick="@{() -> viewModel.addFunctionToExpressionHaveToast(EMathFunction.XPOW3)}"
                             android:text="x³"
                             android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}" />
 
