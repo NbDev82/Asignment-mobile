@@ -78,35 +78,50 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     }
 
     public void addFunctionToExpression(EMathFunction function) {
-        String curExpression = expression.getValue();
-        if (curExpression == null || curExpression.equals("0")) {
-            curExpression = "";
-        }
-        String newExpression = Utils.addFunctionToExpression(curExpression, function);
+        try {
+            String curExpression = expression.getValue();
+            if (curExpression == null || curExpression.equals("0")) {
+                curExpression = "";
+            }
+            String newExpression = Utils.addFunctionToExpression(curExpression, function);
 
-        updateExpressionAndPreviewResult(newExpression);
+            updateExpressionAndPreviewResult(newExpression);
+        } catch (Exception e) {
+            Log.d(TAG, e.getMessage(), e);
+        }
     }
 
     public void addConstantToExpression(EConstant constant) {
-        String curExpression = expression.getValue();
-        String result = previewResult.getValue();
-        if (curExpression == null || curExpression.equals("0")) {
-            curExpression = "";
+        try {
+            String curExpression = expression.getValue();
+            String result = previewResult.getValue();
+            if (curExpression == null || curExpression.equals("0")) {
+                curExpression = "";
+            }
+            String newExpression = Utils.addConstantToExpression(curExpression,constant, result);
+            updateExpressionAndPreviewResult(newExpression);
+        } catch (Exception e) {
+            Log.d(TAG, e.getMessage(), e);
         }
-        String newExpression = Utils.addConstantToExpression(curExpression,constant, result);
-        updateExpressionAndPreviewResult(newExpression);
+
     }
 
     public void addFunctionToExpressionHaveToast(EMathFunction function) {
-        Boolean isValidPreviewResult = Utils.isValidPreviewResult(previewResult.getValue());
-        if(isValidPreviewResult) {
-            String curExpression = expression.getValue();
+        try {
+            Boolean isValidPreviewResult = Utils.isValidPreviewResult(previewResult.getValue());
+            if(isValidPreviewResult) {
+                String curExpression = expression.getValue();
 
-            String newExpression = Utils.addFunctionToExpressionHaveToast(curExpression, function);
-            updateExpressionAndPreviewResult(newExpression);
-        } else {
+                String newExpression = Utils.addFunctionToExpressionHaveToast(curExpression, function);
+                updateExpressionAndPreviewResult(newExpression);
+            } else {
+                this.toastMessage.setValue("Định dạng đã dùng không hợp lệ");
+            }
+        } catch (Exception e) {
             this.toastMessage.setValue("Định dạng đã dùng không hợp lệ");
+            Log.d(TAG, e.getMessage(), e);
         }
+
     }
 
     public void addNumberToExpression(ENumber number) {
