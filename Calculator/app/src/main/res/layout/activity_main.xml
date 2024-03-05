@@ -22,7 +22,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bg_primary">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -483,15 +484,16 @@
             android:layout_below="@id/lineView"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="@dimen/_16sdp"
-            android:background="?android:attr/windowBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:background="@color/bg_primary"
             android:visibility="@{viewModel.isHistoryVisible ? View.VISIBLE : View.GONE}"
             tools:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="@dimen/_205sdp"
                 android:layout_height="match_parent"
+                android:background="@color/bg_primary"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/_7sdp">
 
