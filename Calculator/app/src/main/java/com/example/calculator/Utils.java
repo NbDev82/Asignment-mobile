@@ -8,12 +8,18 @@ import com.example.calculator.customexpression.CubeRootFunction;
 import com.example.calculator.customexpression.FactorialFunction;
 import com.udojava.evalex.Expression;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Utils {
 
     public static final String EXPRESSION_ERROR = "Error";
     public static final int PRECISION = 10;
+
+    private static final String NEGATIVE_INTEGER_PATTERN = "^-\\d+$";
+    private static final String NEGATIVE_FLOAT_PATTERN = "^-\\d+(\\.\\d+)?$";
+    private static final String PARENTHESIZED_NEGATIVE_INTEGER_PATTERN = "^\\(-\\d+\\)$";
+    private static final String PARENTHESIZED_NEGATIVE_FLOAT_PATTERN = "^\\(-\\d+(\\.\\d+)?\\)$";
 
     public static String getResult(String expression) {
         if (expression == null || expression.isEmpty()) {
@@ -51,9 +57,31 @@ public class Utils {
         return expression.replaceAll(factorialRegex, "factorial($1)");
     }
 
-    public static int findLastNumberIndex(String expression) {
-        int lastIndex = -1;
+    public static int findLastNumberIndex(@Nullable String expression) {
+        if (isExpressionEmpty(expression)) {
+            return -1;
+        }
 
+        final int length = expression.length();
+        if (expression.charAt(length - 1) == ')') {
+            if (length < 3 || expression.charAt(length - 2) == ')') {
+                return -1;
+            }
+
+            int i = length - 2;
+            char curChar;
+            do {
+                i--;
+                curChar = expression.charAt(i);
+            } while (i > 0 && (Character.isDigit(curChar) || curChar == '.'));
+
+            if (curChar == '-' && expression.charAt(i - 1) == '(') {
+                return i - 1;
+            }
+            return -1;
+        }
+
+        int lastIndex = -1;
         for (int i = expression.length() - 1; i >= 0; i--) {
             char ch = expression.charAt(i);
             if (Character.isDigit(ch) || ch == '.') {
@@ -191,7 +219,7 @@ public class Utils {
     }
 
     public static String toggleLastNumberSign(@Nullable String expression) {
-        if (expression == null || expression.equals(ENumber.ZERO.getValue())) {
+        if (isExpressionEmpty(expression)) {
             return expression;
         }
 
@@ -201,14 +229,37 @@ public class Utils {
         }
 
         String lastNumber = expression.substring(lastNumberIndex);
-        String newLastNumber;
-        if (lastNumber.startsWith(EOperation.SUBTRACTION.getOperationString())) {
-            newLastNumber = lastNumber.substring(1);
-        } else {
-            newLastNumber = "(" + EOperation.SUBTRACTION.getOperationString() + lastNumber + ")";
+        String newNumber = isNegativeNumber(lastNumber)
+                ? convertNegativeToPositiveNumber(lastNumber)
+                : convertPositiveToNegativeNumber(lastNumber);
+
+        return expression.substring(0, lastNumberIndex) + newNumber;
+    }
+
+    public static boolean isNegativeNumber(@Nullable String number) {
+        if (isExpressionEmpty(number)) {
+            return false;
         }
 
-        return expression.substring(0, lastNumberIndex) + newLastNumber;
+        return number.matches(NEGATIVE_INTEGER_PATTERN)
+                || number.matches(NEGATIVE_FLOAT_PATTERN)
+                || number.matches(PARENTHESIZED_NEGATIVE_INTEGER_PATTERN)
+                || number.matches(PARENTHESIZED_NEGATIVE_FLOAT_PATTERN);
+    }
+
+    private static String convertNegativeToPositiveNumber(String negativeNumber) {
+        StringBuilder newLastNumberBuilder = new StringBuilder();
+        for (int i = 0; i < negativeNumber.length() - 1; i++) {
+            char curChar = negativeNumber.charAt(i);
+            if (Character.isDigit(curChar) || curChar == '.') {
+                newLastNumberBuilder.append(negativeNumber.charAt(i));
+            }
+        }
+        return newLastNumberBuilder.toString();
+    }
+
+    private static String convertPositiveToNegativeNumber(String positiveNumber) {
+        return String.format("(-%s)", positiveNumber);
     }
 
     public static String addDecimalPointToExpression(@Nullable String expression) {

@@ -232,6 +232,22 @@ public class UtilsTest {
     }
 
     @Test
+    public void testFindLastNumberIndex_ZeroNumber() {
+        String expression = "0";
+        int expectedIndex = -1;
+        int result = Utils.findLastNumberIndex(expression);
+        assertEquals(expectedIndex, result);
+    }
+
+    @Test
+    public void testFindLastNumberIndex_ComplexExpression() {
+        String expression = "123+(12+34)";
+        int expectedIndex = -1;
+        int result = Utils.findLastNumberIndex(expression);
+        assertEquals(expectedIndex, result);
+    }
+
+    @Test
     public void testFindLastNumberIndex_NoNumber() {
         String expression = "log(5)";
         int expectedIndex = -1;
@@ -406,5 +422,69 @@ public class UtilsTest {
         String expectedOutput = "50/1";
         String result = Utils.deleteCharacterOrFunction(expression);
         assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testIsNegativeNumber_PositiveInteger() {
+        String expression = "123";
+        boolean expectedResult = false;
+        boolean result = Utils.isNegativeNumber(expression);
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testIsNegativeNumber_NegativeInteger() {
+        String expression = "-456";
+        boolean expectedResult = true;
+        boolean result = Utils.isNegativeNumber(expression);
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testIsNegativeNumber_NegativeNumberWithParentheses() {
+        String expression = "(-34)";
+        boolean expectedResult = true;
+        boolean result = Utils.isNegativeNumber(expression);
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testIsNegativeNumber_PositiveDecimal() {
+        String expression = "3.14";
+        boolean expectedResult = false;
+        boolean result = Utils.isNegativeNumber(expression);
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testIsNegativeNumber_NegativeDecimal() {
+        String expression = "-2.718";
+        boolean expectedResult = true;
+        boolean result = Utils.isNegativeNumber(expression);
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testIsNegativeNumber_NegativeDecimalWithParentheses() {
+        String expression = "(-2.718)";
+        boolean expectedResult = true;
+        boolean result = Utils.isNegativeNumber(expression);
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testIsNegativeNumber_PositiveDecimalWithParentheses() {
+        String expression = "(2.718)";
+        boolean expectedResult = false;
+        boolean result = Utils.isNegativeNumber(expression);
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testIsNegativeNumber_NotANumber() {
+        String expression = "abc";
+        boolean expectedResult = false;
+        boolean result = Utils.isNegativeNumber(expression);
+        assertEquals(expectedResult, result);
     }
 }
