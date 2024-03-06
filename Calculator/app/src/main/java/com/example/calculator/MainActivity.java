@@ -86,6 +86,13 @@ public class MainActivity extends AppCompatActivity {
                 svHistory.startAnimation(fade);
             }
         });
+
+        viewModel.getIsHistoryLandscapeVisible().observe(this, isHistoryLandscapeVisible -> {
+            if(isHistoryLandscapeVisible == true){
+                ScrollView svHistory = findViewById(R.id.sv_history);
+                svHistory.startAnimation(fade);
+            }
+        });
     }
 
     @Override
