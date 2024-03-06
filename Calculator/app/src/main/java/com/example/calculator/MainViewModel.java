@@ -27,6 +27,7 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     private final MutableLiveData<String> previewResult = new MutableLiveData<>("0");
     private final MutableLiveData<String> mode = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isHistoryVisible = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isHistoryLandscapeVisible = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> isMenuVisible = new MutableLiveData<>(false);
     private final MutableLiveData<List<History>> historyList = new MutableLiveData<>(new ArrayList<>());
     private final HistoryDao historyDao;
@@ -47,6 +48,9 @@ public class MainViewModel extends ViewModel implements HistoryListener {
         return mode;
     }
 
+    public LiveData<Boolean> getIsHistoryLandscapeVisible() {
+        return isHistoryLandscapeVisible;
+    }
 
     public LiveData<Boolean> getIsHistoryVisible() {
         return isHistoryVisible;
@@ -234,6 +238,11 @@ public class MainViewModel extends ViewModel implements HistoryListener {
     public void toggleHistory() {
         boolean isHistoryVisible = this.isHistoryVisible.getValue();
         this.isHistoryVisible.postValue(!isHistoryVisible);
+    }
+
+    public void toggleLandscapeHistory() {
+        boolean isHistoryVisible = this.isHistoryLandscapeVisible.getValue();
+        this.isHistoryLandscapeVisible.postValue(!isHistoryVisible);
     }
 
     public void toggleMenu() {
