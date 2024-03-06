@@ -4,6 +4,7 @@ import com.example.calculator.customenum.EConstant;
 import com.example.calculator.customenum.EMathFunction;
 import com.example.calculator.customenum.ENumber;
 import com.example.calculator.customenum.EOperation;
+import com.example.calculator.customexpression.CubeRootFunction;
 import com.example.calculator.customexpression.FactorialFunction;
 import com.udojava.evalex.Expression;
 
@@ -26,6 +27,7 @@ public class Utils {
         try {
             Expression exp = new Expression(expression);
             exp.addFunction(new FactorialFunction());
+            exp.addFunction(new CubeRootFunction());
             exp.setPrecision(PRECISION);
 
             return exp.eval().toPlainString();

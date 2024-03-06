@@ -2,6 +2,7 @@ package com.example.calculator.customenum;
 
 public enum EMathFunction {
     SQRT("sqrt"),
+    CBRT("cbrt"),
     LOG("log"),
     LN("ln"),
     SIN("sin"),

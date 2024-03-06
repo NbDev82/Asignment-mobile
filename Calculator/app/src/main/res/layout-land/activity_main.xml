@@ -224,6 +224,7 @@
                         android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_33sdp"
                         android:text="∛"
+                        android:onClick="@{() -> viewModel.addFunctionToExpression(EMathFunction.CBRT)}"
                         android:visibility="@{viewModel.isMenuVisible ? View.VISIBLE : View.GONE}"/>
 
                 </LinearLayout>
