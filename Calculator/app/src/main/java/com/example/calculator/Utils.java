@@ -134,11 +134,7 @@ public class Utils {
     }
 
     public static String deleteCharacterOrFunction(@Nullable String expression) {
-        if (expression == null || expression.equals(ENumber.ZERO.getValue())) {
-            return expression;
-        }
-
-        if (expression.length() == 1 && expression.charAt(0) != ENumber.ZERO.getValue().charAt(0)) {
+        if (isExpressionEmpty(expression) || isSingleNonZeroCharacter(expression)) {
             return ENumber.ZERO.getValue();
         }
 
@@ -147,9 +143,24 @@ public class Utils {
         }
 
         int startIndex = getStartIndexOfEndFunction(expression);
-        return expression.substring(0, startIndex);
+        String newExpression = expression.substring(0, startIndex);
+        if (isExpressionEmpty(newExpression)) {
+            return ENumber.ZERO.getValue();
+        }
+        return newExpression;
     }
 
+    public static boolean isExpressionEmpty(@Nullable String expression) {
+        return expression == null
+                || expression.isEmpty()
+                || expression.equals(ENumber.ZERO.getValue());
+    }
+
+    public static boolean isSingleNonZeroCharacter(@Nullable String expression) {
+        return expression != null
+                && expression.length() == 1
+                && expression.charAt(0) != ENumber.ZERO.getValue().charAt(0);
+    }
 
     public static boolean isEndOfFunction(String expression) {
         EMathFunction[] functions = EMathFunction.values();

@@ -319,4 +319,92 @@ public class UtilsTest {
         String result = Utils.toggleLastNumberSign(expression);
         assertEquals(expected, result);
     }
+
+    @Test
+    public void testDeleteCharacterOrFunction_NonNullExpressionWithLengthGreaterThan1() {
+        String expression = "12345";
+        String expectedOutput = "1234";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_NonNullExpressionWithLengthEquals1() {
+        String expression = "6";
+        String expectedOutput = "0";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_EndsWithFunction() {
+        String expression = "sin(30)+";
+        String expectedOutput = "sin(30)";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_EndsWithFunction2() {
+        String expression = "sin(";
+        String expectedOutput = "0";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_DoesNotEndWithFunction() {
+        String expression = "2*3+";
+        String expectedOutput = "2*3";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_NullExpression() {
+        String expression = null;
+        String expectedOutput = "0";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_ConsistingOfZero() {
+        String expression = "0";
+        String expectedOutput = "0";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_EndsWithFunctionAndAdditionalCharacters() {
+        String expression = "sqrt(16)+3";
+        String expectedOutput = "sqrt(16)+";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_EndsWithFunctionAndNoAdditionalCharacters() {
+        String expression = "tan(45)";
+        String expectedOutput = "tan(45";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_EndsWithNumberButNotSingleDigit() {
+        String expression = "12345*6";
+        String expectedOutput = "12345*";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
+
+    @Test
+    public void testDeleteCharacterOrFunction_EndsWithZero() {
+        String expression = "50/10";
+        String expectedOutput = "50/1";
+        String result = Utils.deleteCharacterOrFunction(expression);
+        assertEquals(expectedOutput, result);
+    }
 }
